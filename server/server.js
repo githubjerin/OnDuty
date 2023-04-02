@@ -7,7 +7,6 @@ import morgan from "morgan";
 import studentRouter from "./routes/student/student.route.js";
 import odRouterStudent from "./routes/student/ODdetail.route.js";
 import facultyRouter from "./routes/faculty/faculty.route.js";
-import authorityRouter from "./routes/authority/authority.route.js";
 import odRouterFaculty from "./routes/faculty/ODdetail.route.js";
 
 dotenv.config();
@@ -41,5 +40,4 @@ app.get('/', (req, res) => {
 app.use("/student", studentRouter);
 app.use("/od-application", odRouterStudent);
 app.use("/faculty", facultyRouter);
-app.use("/authority", authorityRouter);
 app.use("/od-approval", odRouterFaculty);

@@ -10,15 +10,30 @@ const Schema = mongoose.Schema({
         required: true,
         unique: true
     },
-    authority: {
-        type: String,
-        required:true,
-        enum: ["CLASS-INCHARGE", "ACADEMIC-HEAD", "HEAD-OF-DEPARTMENT"]
-    },
     password: {
         type: String,
         required: true
-    }
+    },
+    authority: 
+        {
+            title: {
+                type: String,
+                required: false,
+                enum: ["CLASS-INCHARGE", "ACADEMIC-HEAD", "HEAD-OF-DEPARTMENT"]
+            },
+            department: {
+                type: String,
+                required: false
+            },
+            year_of_study: {
+                type: Number,
+                required: false
+            },
+            section: {
+                type: String,
+                required: false
+            },
+        }    
 }, {
     timestamps: false
 });

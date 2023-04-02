@@ -10,13 +10,13 @@ Only use
 as "authority" request parameter in authority.route.js
 
 ****SAMPLE REQUESTS JSON BODY****
-GET /student/login
+1. GET /student/login
 {
 	"register_number": 210701095,
 	"password": "admin"
 }
 
-POST /student/signup
+2. POST /student/signup
 {
 	"name": "Jeyapriyan M",
 	"register_number": 210701097,
@@ -26,7 +26,26 @@ POST /student/signup
 	"password": "adminjeyapriyan"
 }
 
-POST /od-application/new-entry
+3. GET /faculty/login
+{
+	"faculty_code": "106",
+	"password": "adminkumar"
+}
+
+4. POST /faculty/signup 
+{
+	"name": "Jananee V",
+	"faculty_code": "108",
+	"password": "adminjananee",
+	"authority": {
+		"title": "CLASS-INCHARGE",
+		"department": "CSE",
+		"year_of_study": "2",
+		"section": "B"
+	}
+}
+
+5. POST /od-application/new-entry
 {
     "event": "Technical Symposium",
 	"organization": "REC",
@@ -35,46 +54,19 @@ POST /od-application/new-entry
 	"proof": "none"
 }
 
-POST /od-application/modify-entry/<_id>
+6. GET /od-application/
+
+7. POST /od-application/modify-entry/<_id>
 {
 	"outcome": "WINNER",
 	"proof": "done"
 }
 
-POST /faculty/signup
-{
-	"name": "Kumar P",
-	"faculty_code": "106",
-	"authority": "HEAD-OF-DEPARTMENT",
-	"password": "adminkumar"
-}
+8. POST /od-application/delete-entry/<_id>
 
-GET /faculty/login
-{
-	"faculty_code": "106",
-	"password": "adminkumar"
-}
+9. GET /od-approval/
 
-POST /authority/new-authority/hod
-{
-	"year_of_study": 2,
-	"department": "CSE"
-}
-
-POST /authority/new-authority/ah
-{
-	"year_of_study": 2,
-	"department": "CSE"
-}
-
-POST /authority/new-authority/ci
-{
-	"year_of_study": 2,
-	"section": "B",
-	"department": "CSE"
-}
-
-POST /od-approval/modify-entry/<_id>
+10. POST /od-approval/modify-entry/<_id>
 {
 	"status": "APPROVED"
 }

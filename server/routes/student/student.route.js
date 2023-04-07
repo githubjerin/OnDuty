@@ -33,18 +33,18 @@ router.post('/login', async (req, res) => {
 
                 const token = jwt.sign({ register_number: req.body.register_number }, process.env.SECRET);
                 res.status(200).json({
-                    token: token,
+                    token: token
                 });
 
             } else {
                 res.status(401).json({
-                    error: "invalid password",
+                    error: "invalid password"
                 });
             }
 
         } else { 
             res.status(401).json({
-                error: "invalid register numeber",
+                error: "invalid register numeber"
             });
         }
 

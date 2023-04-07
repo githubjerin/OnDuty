@@ -22,7 +22,7 @@ router.post('/signup', async (req, res) => {
 /*  END OF SECTION - I  */
 
 /*  SECTION - II : AUTHENTICATION    */
-router.get('/login', async (req, res) => {
+router.post('/login', async (req, res) => {
     try{
         const faculty_detail = await faculty.findOne({ faculty_code: req.body.faculty_code });
 
@@ -32,14 +32,20 @@ router.get('/login', async (req, res) => {
             if (valid) {
 
                 const token = jwt.sign({ faculty_code: req.body.faculty_code }, process.env.SECRET);
-                res.json({ token });
+                res.status(200).json({ 
+                    token: token
+                });
 
             } else {
-                res.status(400).json({ error: "invalid password"});
+                res.status(401).json({ 
+                    error: "invalid password"
+                });
             }
 
         } else { 
-            res.status(400).json({ error: "invalid faculty code"});
+            res.status(401).json({ 
+                error: "invalid faculty code"
+            });
         }
 
     } catch (error){

@@ -22,7 +22,7 @@ router.post('/signup', async (req, res) => {
 /*  END OF SECTION - I  */
 
 /*  SECTION - II : AUTHENTICATION    */
-router.get('/login', async (req, res) => {
+router.post('/login', async (req, res) => {
     try{
         const student_detail = await student.findOne({ register_number: req.body.register_number });
 
@@ -32,14 +32,20 @@ router.get('/login', async (req, res) => {
             if (valid) {
 
                 const token = jwt.sign({ register_number: req.body.register_number }, process.env.SECRET);
-                res.json({ token });
+                res.status(200).json({
+                    token: token,
+                });
 
             } else {
-                res.status(400).json({ error: "invalid password"});
+                res.status(401).json({
+                    error: "invalid password",
+                });
             }
 
         } else { 
-            res.status(400).json({ error: "invalid register numeber"});
+            res.status(401).json({
+                error: "invalid register numeber",
+            });
         }
 
     } catch (error){

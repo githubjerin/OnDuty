@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
-export const maxAge = 1 * 24 * 60 * 60;
+export const maxAge = 1 * 24 * 60 * 60; // 1 day in seconds
 
 export function createToken(payload) {
     const token = jwt.sign(

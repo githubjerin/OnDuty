@@ -13,13 +13,14 @@ export default class Landing extends Component {
         this.onInputPassword = this.onInputPassword.bind(this);
         this.onInputUser = this.onInputUser.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-        this.getToken =this.getToken.bind(this);
+        this.setLoggedInStatus =this.setLoggedInStatus.bind(this);
+        this.setDataLocale =this.setDataLocale.bind(this);
 
         this.state = {
             username: null,
-            password: null
+            password: null,
+            user: null
         };
-        this.user = "";
     }
 
     onInputUsername(params) {
@@ -35,12 +36,40 @@ export default class Landing extends Component {
     }
 
     onInputUser(params) {
-        this.user = params.target.value;
+        this.setState({
+            user: params.target.value
+        });
     }
 
-    getToken(params) {
-        const token = params.data.token;
-        console.log(token);
+    setDataLocale(isLoggedIn, user) {
+        sessionStorage.setItem('isLoggedIn', isLoggedIn);
+        sessionStorage.setItem('user', user);
+    }
+
+    setLoggedInStatus(data) {
+        if (!data || data === undefined) {
+            this.setDataLocale(false, 'none');
+        } else {
+            if (this.state.user === 'FACULTY') {
+                const { faculty_code } = data;
+                if (!faculty_code) {
+                    this.setDataLocale(false, 'none');
+                } else {
+                    this.setDataLocale(true, 'FACULTY');
+                }
+
+            } else if (this.state.user === 'STUDENT') {
+                const { register_number } = data;
+                if (!register_number) {
+                    this.setDataLocale(false, 'none');
+                } else {
+                    this.setDataLocale(true, 'STUDENT');
+                }
+
+            } else {
+                this.setDataLocale(false, 'none');
+            }
+        }
     }
 
     async onSubmit(params) {
@@ -50,40 +79,38 @@ export default class Landing extends Component {
             register_number: this.state.username,
             faculty_code: this.state.username,
             password: this.state.password
-        } 
+        };
 
         try {
 
-            if (this.user === "STUDENT") {
+            if (this.state.user === "STUDENT") {
                 await axios.post('http://localhost:2003/student/login', body, { withCredentials: true })
-                                .then(res => this.getToken(res));
+                                .then((res) => this.setLoggedInStatus(res.data));
             } else {
                 await axios.post('http://localhost:2003/faculty/login', body, { withCredentials: true })
-                                .then(res => this.getToken(res));
-                /*const res = await fetch('http://localhost:2003/faculty/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    //credentials: 'include',
-                    body: JSON.stringify(body)
-                });
-                this.getToken(res);*/
-            } 
+                                .then((res) => this.setLoggedInStatus(res.data));
+            }
             this.setState({
                 username: null,
-                password: null
+                password: null,
+                user: null
             });
 
         } catch (AxiosError) {
-            if (AxiosError.response.status === 401) {
-                alert(AxiosError.response.data.error);
-            } else {
-                console.log(AxiosError);
-            }
+            console.log(AxiosError);
+            this.setDataLocale(false, 'none');
         }
-
         document.getElementById("login-form").reset();
+
+        if (sessionStorage.getItem('user') === 'FACULTY') {
+            if (sessionStorage.getItem('isLoggedIn') === 'true') {
+                window.location = '/faculty-home';
+            } 
+        } else if (sessionStorage.getItem('user') === 'STUDENT') {
+            if (sessionStorage.getItem('isLoggedIn') === 'true') {
+                window.location = '/student-home';
+            } 
+        }
     }
 
     render() {

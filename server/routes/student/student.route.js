@@ -33,22 +33,25 @@ router.post('/login', async (req, res) => {
                 const token = createToken({ register_number: req.body.register_number });
                 res.cookie('jwt', token, { httpOnly: true, maxAge: (maxAge * 1000) });
                 res.status(200).json({
-                    token: token
+                    register_number: req.body.register_number
                 });
 
             } else {
+                res.cookie('jwt', '', { httpOnly: true, maxAge: 1 });
                 res.status(401).json({
                     error: "invalid password"
                 });
             }
 
         } else { 
+            res.cookie('jwt', '', { httpOnly: true, maxAge: 1 });
             res.status(401).json({
                 error: "invalid register numeber"
             });
         }
 
     } catch (error){
+        res.cookie('jwt', '', { httpOnly: true, maxAge: 1 });
         res.status(400).json({ error });
     }
 });

@@ -5,8 +5,8 @@ dotenv.config();
 
 const isLoggedIn = async (req, res, next) => {
     try {
-        if(req.headers.authorization) {
-            const token = req.headers.authorization.split(' ')[1];
+        if(req.headers.authorization || req.cookies) {
+            const token = (req.cookies) ? req.cookies.jwt : req.headers.authorization.split(' ')[1];
             if(token) {
                 const payload = jwt.verify(token, process.env.SECRET);
                 if(payload) {
@@ -19,7 +19,7 @@ const isLoggedIn = async (req, res, next) => {
                 res.status(401).json({ error: "Authorization header malformed" });
             }
         } else {
-            res.status(401).json({ error: "Authorization header not present" });
+            res.status(401).json({ error: "Authorization header or Cookie not present" });
         }
     } catch (error) {
         res.status(400).json({ error });

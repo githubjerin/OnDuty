@@ -1,8 +1,8 @@
 import student from "../../models/student.js";
-import bcrypt from "bcryptjs";
 import express from "express";
 import dotenv from "dotenv";
-import jwt from "jsonwebtoken";
+
+import { createToken, comparePassword, maxAge } from "../../modules/jwt-auth.modules.js";
 
 const router = express.Router();
 dotenv.config();
@@ -10,7 +10,6 @@ dotenv.config();
 /*  SECTION - I : USER CREATION    */
 router.post('/signup', async (req, res) => {
     try {
-        req.body.password = await bcrypt.hash(req.body.password, 10);
         const newStudent = await student.create(req.body);
 
         newStudent.save().then(() => console.log("Student added"));
@@ -28,10 +27,11 @@ router.post('/login', async (req, res) => {
 
         if (student_detail) {
 
-            const valid = await bcrypt.compare(req.body.password, student_detail.password)
+            const valid = await comparePassword(req.body.password, student_detail.password)
             if (valid) {
 
-                const token = jwt.sign({ register_number: req.body.register_number }, process.env.SECRET);
+                const token = createToken({ register_number: req.body.register_number });
+                res.cookie('jwt', token, { httpOnly: true, maxAge: (maxAge * 1000) });
                 res.status(200).json({
                     token: token
                 });

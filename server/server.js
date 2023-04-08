@@ -3,6 +3,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import morgan from "morgan";
+import cookieParser from "cookie-parser";
 
 import studentRouter from "./routes/student/student.route.js";
 import odRouterStudent from "./routes/student/ODdetail.route.js";
@@ -14,9 +15,13 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT;
 
-app.use(cors());
+app.use(cors({
+    credentials: true, 
+    origin: [process.env.CORS_ACCEPTED_ORIGIN_1]
+}));
 app.use(json());
 app.use(morgan("tiny"));
+app.use(cookieParser());
 
 mongoose.connect(
     process.env.MONGODB_URI,

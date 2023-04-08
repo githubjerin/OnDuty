@@ -55,11 +55,20 @@ export default class Landing extends Component {
         try {
 
             if (this.user === "STUDENT") {
-                await axios.post('http://localhost:2003/student/login', body)
+                await axios.post('http://localhost:2003/student/login', body, { withCredentials: true })
                                 .then(res => this.getToken(res));
             } else {
-                await axios.post('http://localhost:2003/faculty/login', body)
+                await axios.post('http://localhost:2003/faculty/login', body, { withCredentials: true })
                                 .then(res => this.getToken(res));
+                /*const res = await fetch('http://localhost:2003/faculty/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    //credentials: 'include',
+                    body: JSON.stringify(body)
+                });
+                this.getToken(res);*/
             } 
             this.setState({
                 username: null,
@@ -79,26 +88,26 @@ export default class Landing extends Component {
 
     render() {
         return (
-            <div>
-                <div class="background">
-                    <img class='watermark' src={watermark} alt='watermark'/>
+            <div className="landing-page">
+                <div>
+                    <img className='watermark' src={watermark} alt='watermark'/>
                 </div>
-                <div class='content'>
-                    <div class="title">
+                <div className='content'>
+                    <div className="title">
                         <h1>REC On-Duty Application Portal</h1>
                     </div>
-                    <div class="cover">
+                    <div className="cover">
                         <h2>Welcome</h2>
 
                         <form onSubmit={ this.onSubmit } id="login-form">
 
                             <div className="form-group">
-                                <div class="inputbox">
+                                <div className="inputbox">
                                     <icon>
                                         <FontAwesomeIcon icon={faUser} style={{color: "#532762",}} />
                                     </icon>
                                     <input 
-                                        type="number" 
+                                        type="text" 
                                         required
                                         onInput={ this.onInputUsername } 
                                         />
@@ -107,7 +116,7 @@ export default class Landing extends Component {
                             </div>
 
                             <div className="form-group">
-                                <div class="inputbox">
+                                <div className="inputbox">
                                     <icon>
                                         <FontAwesomeIcon icon={faLock} style={{color: "#532762"}} />
                                     </icon>
@@ -120,7 +129,7 @@ export default class Landing extends Component {
                             </div>
 
                             <div className="form-group">
-                                <div class="userSelect">
+                                <div className="userSelect">
                                     <h2>I am a</h2>
                                     <input 
                                         type="radio" 

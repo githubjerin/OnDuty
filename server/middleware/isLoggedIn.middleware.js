@@ -10,16 +10,16 @@ const isLoggedIn = async (req, res, next) => {
             if(token) {
                 const payload = jwt.verify(token, process.env.SECRET);
                 if(payload) {
-                    req.user = payload;
+                    req.user = payload; 
                     next();
                 } else {
-                    res.status(400).json({ error: "token verification failed" });
+                    res.status(498).json({ error: "token verification failed" });
                 }
             } else {
-                res.status(400).json({ error: "Authorization header malformed" });
+                res.status(401).json({ error: "Authorization header malformed" });
             }
         } else {
-            res.status(400).json({ error: "Authorization header not present" });
+            res.status(401).json({ error: "Authorization header not present" });
         }
     } catch (error) {
         res.status(400).json({ error });

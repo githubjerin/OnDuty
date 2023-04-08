@@ -27,6 +27,13 @@ const Schema = mongoose.Schema({
     timestamps: false
 });
 
+// MONGOOSE HOOKS (PRE HOOK)
+Schema.pre('save', function (next) {
+    //const salt = bcrypt.genSalt();
+    this.password = bcrypt.hash(this.password, 10);
+    next();
+});
+
 const student = mongoose.model('student', Schema);
 
 export default student;

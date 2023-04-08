@@ -1,8 +1,8 @@
 import faculty from "../../models/faculty.js";
-import bcrypt from "bcryptjs";
 import express from "express";
 import dotenv from "dotenv";
-import jwt from "jsonwebtoken";
+
+import { createToken, comparePassword, maxAge } from "../../modules/jwt-auth.modules.js";
 
 const router = express.Router();
 dotenv.config();
@@ -10,7 +10,6 @@ dotenv.config();
 /*  SECTION - I : USER CREATION    */
 router.post('/signup', async (req, res) => {
     try {
-        req.body.password = await bcrypt.hash(req.body.password, 10);
         const newFaculty = await faculty.create(req.body);
 
         newFaculty.save().then(() => console.log("Faculty added"));
@@ -28,10 +27,11 @@ router.post('/login', async (req, res) => {
 
         if (faculty_detail) {
 
-            const valid = await bcrypt.compare(req.body.password, faculty_detail.password)
+            const valid = await comparePassword(req.body.password, faculty_detail.password);
             if (valid) {
 
-                const token = jwt.sign({ faculty_code: req.body.faculty_code }, process.env.SECRET);
+                const token = createToken({ faculty_code: faculty_detail.faculty_code });
+                res.cookie('jwt', token, { httpOnly: true, maxAge: (maxAge * 1000) });
                 res.status(200).json({ 
                     token: token
                 });

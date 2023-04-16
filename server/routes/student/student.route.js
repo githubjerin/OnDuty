@@ -3,6 +3,8 @@ import express from "express";
 import dotenv from "dotenv";
 
 import { createToken, comparePassword, maxAge } from "../../modules/jwt-auth.modules.js";
+import isLoggedIn from "../../middleware/isLoggedIn.middleware.js";
+import isAuthorized from "../../middleware/isAuthorized.middleware.js";
 
 const router = express.Router();
 dotenv.config();
@@ -56,5 +58,36 @@ router.post('/login', async (req, res) => {
     }
 });
 /*  END OF SECTION - II  */
+
+router.post('/get-details', [isLoggedIn, isAuthorized], async (req, res) => {
+    const student_detail = await student.findOne({ register_number: req.body.register_number })
+                                    .select({
+                                        name: 1,
+                                        year_of_study: 1,
+                                        department: 1,
+                                        section: 1,
+                                        _id: 0
+                                    });
+    res.status(200).json(student_detail);
+});
+
+router.get('/get-details', isLoggedIn, async (req, res) => {
+    const student_detail = await student.findOne({ register_number: req.user.register_number })
+                                    .select({
+                                        name: 1,
+                                        year_of_study: 1,
+                                        department: 1,
+                                        section: 1,
+                                        _id: 0
+                                    });
+    
+    if (student_detail) {
+        res.status(200).json(student_detail);
+    } else { 
+        res.status(400).json({ 
+            error: "Student not found"
+        });
+    }
+});
 
 export default router;

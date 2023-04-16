@@ -3,6 +3,7 @@ import express from "express";
 import dotenv from "dotenv";
 
 import { createToken, comparePassword, maxAge } from "../../modules/jwt-auth.modules.js";
+import isLoggedIn from "../../middleware/isLoggedIn.middleware.js";
 
 const router = express.Router();
 dotenv.config();
@@ -56,5 +57,33 @@ router.post('/login', async (req, res) => {
     }
 });
 /*  END OF SECTION - II  */
+
+router.get('/get-details', isLoggedIn, async (req, res) => {
+    try {
+        const faculty_detail = await faculty
+                                        .findOne({ faculty_code: req.user.faculty_code })
+                                        .select({
+                                            authority: {
+                                                department: 1,
+                                                year_of_study: 1,
+                                                section: 1
+                                            }, 
+                                            _id: 0,
+                                            name: 1,
+                                            faculty_code: 1
+                                        });
+
+        if (faculty_detail) {
+            res.status(200).json(faculty_detail);
+        } else { 
+            res.status(400).json({ 
+                error: "Faculty not found"
+            });
+        }
+
+    } catch (error){
+        res.status(400).json({ error });
+    }
+});
 
 export default router;

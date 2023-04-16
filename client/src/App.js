@@ -1,6 +1,6 @@
-import FacultyHome from './components/facultyHome/facultyHome.page.jsx';
-import StudentHome from './components/studentHome/studentHome.page.jsx';
-import Landing from './components/landing/landing.page.jsx';
+import FacultyHome from './components/pages/facultyHome.page.jsx';
+import StudentHome from './components/pages/studentHome.page.jsx';
+import Landing from './components/pages/landing.page.jsx';
 import ProtectedRoutes from './components/protectedRoutes.js';
 import { 
   BrowserRouter as Router, 

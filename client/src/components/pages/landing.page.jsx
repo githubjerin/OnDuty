@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import './landing.page.css';
+import '../res/styles.css';
 import watermark from '../res/watermark.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLock } from '@fortawesome/free-solid-svg-icons';
@@ -50,20 +50,20 @@ export default class Landing extends Component {
         if (!data || data === undefined) {
             this.setDataLocale(false, 'none');
         } else {
-            if (this.state.user === 'FACULTY') {
+            if (this.state.user === 'fauclty') {
                 const { faculty_code } = data;
                 if (!faculty_code) {
                     this.setDataLocale(false, 'none');
                 } else {
-                    this.setDataLocale(true, 'FACULTY');
+                    this.setDataLocale(true, 'faculty');
                 }
 
-            } else if (this.state.user === 'STUDENT') {
+            } else if (this.state.user === 'student') {
                 const { register_number } = data;
                 if (!register_number) {
                     this.setDataLocale(false, 'none');
                 } else {
-                    this.setDataLocale(true, 'STUDENT');
+                    this.setDataLocale(true, 'student');
                 }
 
             } else {
@@ -83,7 +83,7 @@ export default class Landing extends Component {
 
         try {
 
-            if (this.state.user === "STUDENT") {
+            if (this.state.user === "student") {
                 await axios.post('http://localhost:2003/student/login', body, { withCredentials: true })
                                 .then((res) => this.setLoggedInStatus(res.data));
             } else {
@@ -102,11 +102,11 @@ export default class Landing extends Component {
         }
         document.getElementById("login-form").reset();
 
-        if (sessionStorage.getItem('user') === 'FACULTY') {
+        if (sessionStorage.getItem('user') === 'faculty') {
             if (sessionStorage.getItem('isLoggedIn') === 'true') {
                 window.location = '/faculty-home';
             } 
-        } else if (sessionStorage.getItem('user') === 'STUDENT') {
+        } else if (sessionStorage.getItem('user') === 'student') {
             if (sessionStorage.getItem('isLoggedIn') === 'true') {
                 window.location = '/student-home';
             } 
@@ -130,28 +130,28 @@ export default class Landing extends Component {
 
                             <div className="form-group">
                                 <div className="inputbox">
-                                    <icon>
+                                    <i>
                                         <FontAwesomeIcon icon={faUser} style={{color: "#532762",}} />
-                                    </icon>
+                                    </i>
                                     <input 
                                         type="text" 
                                         required
                                         onInput={ this.onInputUsername } 
                                         />
-                                    <label for="">Faculty Code | Register Number</label>
+                                    <label>Faculty Code | Register Number</label>
                                 </div>
                             </div>
 
                             <div className="form-group">
                                 <div className="inputbox">
-                                    <icon>
+                                    <i>
                                         <FontAwesomeIcon icon={faLock} style={{color: "#532762"}} />
-                                    </icon>
+                                    </i>
                                     <input 
                                         type="password" 
                                         required 
                                         onInput={ this.onInputPassword }/>
-                                    <label for="">Password</label>
+                                    <label>Password</label>
                                 </div>
                             </div>
 
@@ -162,7 +162,7 @@ export default class Landing extends Component {
                                         type="radio" 
                                         id="faculty" 
                                         name="userselect" 
-                                        value="FACULTY"
+                                        value="faculty"
                                         onInput={ this.onInputUser }
                                         />
                                     <label>Faculty    </label> 
@@ -170,7 +170,7 @@ export default class Landing extends Component {
                                         type="radio" 
                                         id="student" 
                                         name="userselect" 
-                                        value="STUDENT"
+                                        value="student"
                                         onInput={ this.onInputUser }
                                         />
                                     <label>Student</label>

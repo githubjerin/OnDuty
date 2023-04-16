@@ -5,28 +5,39 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material';
+import { Primary } from './res/themes.js';
 
 
-export default function CardComponent() {
+export default function CardComponent(props) {
+  function numToRoman(num) {
+    const table = {'1': 'I', '2': 'II', '3': 'III', '4': 'IV'};
+    return table[num];
+  }
+
   return (
-    <Card sx={{ minWidth: 275, boxShadow: 3, marginTop: 2, bgcolor: alpha('#4d004d', 0.05) }}>
+    <Card sx={{ 
+      minWidth: 275, 
+      boxShadow: 3, 
+      marginTop: 2, 
+      bgcolor: alpha(Primary['card-bg'], Primary['card-opacity'])
+      }}>
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Jerin BS - II CSE B (210701095)
+          {props.name} - {numToRoman(props.year_of_study)} {props.department} {props.section} ({props.register_number})
         </Typography>
         <Typography variant="h5" component="div" color="#4d004d">
-          Technovation CSBS
+          {props.event}
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          Rajalakshmi Engineering College
+          {props.organization}
         </Typography>
         <Typography variant="body2">
-          Outcome: Winner
+          Outcome: {props.outcome}
           <br />
-          {'From        to         '}
+          {'From  ' + props.start_date.substring(0, 10) + '  to  ' + props.end_date.substring(0, 10)}
         </Typography>
         <Typography variant="body3">
-          Status: Approved
+          Status: {props.status}
         </Typography>
       </CardContent>
       <CardActions >

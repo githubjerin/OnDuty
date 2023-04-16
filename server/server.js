@@ -9,6 +9,7 @@ import studentRouter from "./routes/student/student.route.js";
 import odRouterStudent from "./routes/student/ODdetail.route.js";
 import facultyRouter from "./routes/faculty/faculty.route.js";
 import odRouterFaculty from "./routes/faculty/ODdetail.route.js";
+import logoutRouter from "./routes/logout.route.js";
 
 dotenv.config();
 
@@ -46,3 +47,4 @@ app.use("/student", studentRouter);
 app.use("/od-application", odRouterStudent);
 app.use("/faculty", facultyRouter);
 app.use("/od-approval", odRouterFaculty);
+app.use("/logout", logoutRouter);

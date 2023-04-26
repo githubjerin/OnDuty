@@ -5,13 +5,20 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material';
-import { Primary } from './res/themes.js';
+import { Primary } from '../res/themes.js';
 
 
 export default function CardComponent(props) {
   function numToRoman(num) {
     const table = {'1': 'I', '2': 'II', '3': 'III', '4': 'IV'};
     return table[num];
+  }
+
+  function isApproved(status) {
+    if ( status === 'APPROVED' ) {
+      return true;
+    }
+    else { return false }
   }
 
   return (
@@ -41,8 +48,22 @@ export default function CardComponent(props) {
         </Typography>
       </CardContent>
       <CardActions >
-        <Button size="small" variant="contained" color="success">Approve</Button>
-        <Button size="small" variant="contained" color="error">Reject</Button>
+        <Button 
+          size="small" 
+          variant="contained" 
+          color="success" 
+          disabled={isApproved(props.status)}
+        >
+          Approve
+        </Button>
+        <Button 
+          size="small" 
+          variant="contained" 
+          color="error" 
+          disabled={isApproved(props.status) || props.status === 'NOT-APPROVED'}
+        >
+          Reject
+        </Button>
         <Button size="small">View Proof</Button>
       </CardActions>
     </Card>

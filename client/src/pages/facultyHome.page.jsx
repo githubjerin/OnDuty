@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import CardComponent from "../facutyCard.component";
-import Navbar from "../navbar.component";
+import CardComponent from "../components/facutyCard.component";
+import Navbar from "../components/navbar.component";
 import "../res/styles.css";
 import axios from "axios";
 

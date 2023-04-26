@@ -28,11 +28,13 @@ const Schema = mongoose.Schema({
 });
 
 // MONGOOSE HOOKS (PRE HOOK)
-Schema.pre('save', function (next) {
+/*Schema.pre('save', async function (next) {
     //const salt = bcrypt.genSalt();
-    this.password = bcrypt.hash(this.password, 10);
+    console.log('hi');
+    this.password = await bcrypt.hash(this.password, 10);
+    console.log('hi');
     next();
-});
+});*/
 
 const student = mongoose.model('student', Schema);
 

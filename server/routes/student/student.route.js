@@ -1,6 +1,7 @@
 import student from "../../models/student.js";
 import express from "express";
 import dotenv from "dotenv";
+import bcrypt from 'bcryptjs';
 
 import { createToken, comparePassword, maxAge } from "../../modules/jwt-auth.modules.js";
 import isLoggedIn from "../../middleware/isLoggedIn.middleware.js";
@@ -12,8 +13,10 @@ dotenv.config();
 /*  SECTION - I : USER CREATION    */
 router.post('/signup', async (req, res) => {
     try {
+        req.body.password = await bcrypt.hash(req.body.password, 10);
         const newStudent = await student.create(req.body);
-
+        console.log(req.body);
+        
         newStudent.save().then(() => console.log("Student added"));
         res.json(newStudent);
     } catch (error) {
@@ -72,7 +75,7 @@ router.post('/get-details', [isLoggedIn, isAuthorized], async (req, res) => {
 });
 
 router.get('/get-details', isLoggedIn, async (req, res) => {
-    const student_detail = await student.findOne({ register_number: req.user.register_number })
+    const student_detail = await student.find({ register_number: req.user.register_number })
                                     .select({
                                         name: 1,
                                         year_of_study: 1,
@@ -80,7 +83,6 @@ router.get('/get-details', isLoggedIn, async (req, res) => {
                                         section: 1,
                                         _id: 0
                                     });
-    
     if (student_detail) {
         res.status(200).json(student_detail);
     } else { 

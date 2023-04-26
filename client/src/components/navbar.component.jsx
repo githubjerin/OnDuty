@@ -6,9 +6,9 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faBell } from '@fortawesome/free-solid-svg-icons';
-import "./res/styles.css";
+import "../res/styles.css";
 import axios from "axios";
-import { Primary } from './res/themes.js';
+import { Primary } from '../res/themes.js';
 
 export default function Navbar() {
   const [name, setName] = React.useState(' ');
@@ -16,7 +16,9 @@ export default function Navbar() {
   async function getName() {
     await axios.get('http://localhost:2003/' + sessionStorage.getItem('user') + '/get-details', { withCredentials: true })
               .then((res) => {
-                setName(res.data.name);
+                if ( sessionStorage.getItem('user') === 'student') {
+                  setName(res.data[0].name);
+                } else { setName(res.data.name); }
               });
   }
 

@@ -1,4 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
+import React from "react";
 
 const auth = () => {
     if (sessionStorage.getItem('user') !== 'none')

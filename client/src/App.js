@@ -1,14 +1,14 @@
-import FacultyHome from './components/pages/facultyHome.page.jsx';
-import StudentHome from './components/pages/studentHome.page.jsx';
-import Landing from './components/pages/landing.page.jsx';
-import ProtectedRoutes from './components/protectedRoutes.js';
+import FacultyHome from './pages/facultyHome.page.jsx';
+import StudentHome from './pages/studentHome.page.jsx';
+import Landing from './pages/landing.page.jsx';
+import ProtectedRoutes from './protectedRoutes.js';
 import { 
   BrowserRouter as Router, 
   Routes, 
   Route,
   useNavigate
 } from "react-router-dom";
-
+import React from 'react';
 
 function App() {
   return (
@@ -23,5 +23,6 @@ function App() {
     </Router>
   );
 }
+
 
 export default App;

@@ -68,7 +68,7 @@ router.post('/modify-entry/:id', isLoggedIn, async (req, res) => {
 /* DELETE - REMOVE ENTRIES */
 //TO BE EDITED
 //ERR: AUTHENTICATION [ REGISTER NUMBER IS NOT VALIDATED ]
-router.post('/delete-entry/:id', isLoggedIn, async (req, res) => {
+router.get('/delete-entry/:id', isLoggedIn, async (req, res) => {
     try {
         on_duty_detail
             .findByIdAndDelete(req.params.id)

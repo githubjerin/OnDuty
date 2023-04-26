@@ -50,7 +50,7 @@ export default class Landing extends Component {
         if (!data || data === undefined) {
             this.setDataLocale(false, 'none');
         } else {
-            if (this.state.user === 'fauclty') {
+            if (this.state.user === 'faculty') {
                 const { faculty_code } = data;
                 if (!faculty_code) {
                     this.setDataLocale(false, 'none');

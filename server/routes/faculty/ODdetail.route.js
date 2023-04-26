@@ -25,7 +25,7 @@ router.get('/', isLoggedIn, async (req, res) => {
                         }, 
                         _id: 0 
                     });
-   
+
         if ( authority[0].toString().length > 2 ) {
             //GETTING STUDENTS' REGISTER NUMBER
             const students = 
@@ -41,14 +41,21 @@ router.get('/', isLoggedIn, async (req, res) => {
             for (const each of students) {
                 const od_detail = await on_duty_detail.find(each).select("-__v");
                 if (od_detail[0]) {
-                    od_details.push(od_detail[0]);
+                    od_details.push(od_detail);
                 }
             }
+            var result = [];
+            for (const each of od_details) {
+                for (const detail of each) {
+                    result.push(detail);
+                }
+            }
+
         } else {
             res.status(400).json({ error: "Faculty is not an authority of any"});
         }
 
-        res.json(od_details);
+        res.json(result);
     } catch(error) {
         res.status(400).json({ error: error });
     }

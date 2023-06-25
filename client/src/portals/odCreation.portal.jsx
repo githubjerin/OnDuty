@@ -19,6 +19,7 @@ export default function OdCreation({ open, onSubmit }) {
   const [outcome, setOutcome] = React.useState('');
   const [start, setStart] = React.useState();
   const [end, setEnd] = React.useState();
+  const [proof, setProof] = React.useState();
 
   if( !open ) {
     return null;
@@ -28,18 +29,26 @@ export default function OdCreation({ open, onSubmit }) {
     setOutcome(event.target.value);
   };
 
-  const newEntry = () => {
-    const body = {
-       event: event,
-       outcome: outcome,
-       organization: organization,
-       start_date : start,
-       end_date: end
-    }
+  function newEntry () {
+  
+    const formData = new FormData();
+    formData.append('event', event);
+    formData.append('outcome', outcome);
+    formData.append('organization', organization);
+    formData.append('start_date', start);
+    formData.append('end_date', end);
+    formData.append('proof', proof);
 
-    axios.post('http://localhost:2003/od-application/new-entry', body, {withCredentials: true})
-          .then(alert('Entry Added'))
+    axios.post('http://localhost:2003/od-application/new-entry', formData, {withCredentials: true})
+          .then(() => {
+            alert('Entry Added');
+            window.location.reload();
+          })
           .catch((err) => console.log(err));
+  }
+
+  const handleProof = (props) => {
+    setProof(props.target.files[0]);
   }
 
   return ReactDom.createPortal(
@@ -49,6 +58,7 @@ export default function OdCreation({ open, onSubmit }) {
         <div className="title">
             <h1>Apply for New OD</h1>
         </div>
+        
         <Box
         component="form"
         sx={{
@@ -73,6 +83,7 @@ export default function OdCreation({ open, onSubmit }) {
             value={ event }
             onChange={(params) => setEvent(params.target.value)}
             variant="outlined" 
+            required
           />
 
           <TextField 
@@ -85,6 +96,7 @@ export default function OdCreation({ open, onSubmit }) {
             value={ organization }
             onChange={(params) => setOrganization(params.target.value)}
             variant="outlined" 
+            required
           />
 
           <FormControl fullWidth sx={{marginBottom: '10px'}}>
@@ -93,11 +105,13 @@ export default function OdCreation({ open, onSubmit }) {
               value={ outcome }
               label='outcome'
               onChange={handleChange}
+              required
             >
               <MenuItem value={'WINNER'}>Winner</MenuItem>
               <MenuItem value={'RUNNER'}>Runner</MenuItem>
               <MenuItem value={'RUNNER-UP'}>Runner-Up</MenuItem>
               <MenuItem value={'PARTICIPATED'}>Participated</MenuItem>
+              <MenuItem value={'NIL'}>Tentative</MenuItem>
             </Select>
           </FormControl>   
 
@@ -106,14 +120,27 @@ export default function OdCreation({ open, onSubmit }) {
             value={ start }
             onChange={(date) => setStart(date)}
             sx={{ width: '100%', marginBottom: '10px' }}
+            required
           />    
 
           <DateTimePicker
             label="End Date"
             value={ end }
             onChange={(date) => setEnd(date)}
-            sx={{ width: '100%' }}
+            sx={{ width: '100%', marginBottom: '10px' }}
+            required
           />  
+
+          <form method='post' encType='multipart/form-data' className='proof-upload'>
+              <input 
+                  type="file" 
+                  accept=".png, .jpg, .jpeg"
+                  name="proof"
+                  onChange={handleProof}
+              />
+          </form>
+            
+          
 
           <Box
             sx={{
@@ -125,7 +152,7 @@ export default function OdCreation({ open, onSubmit }) {
           >
             <Button 
               variant="contained" 
-              onClick={ () => {
+              onClick={() => {
                 newEntry();
                 onSubmit();
               }}
@@ -137,7 +164,6 @@ export default function OdCreation({ open, onSubmit }) {
             >
               Submit
             </Button>
-
             <Button 
               variant="outlined" 
               onClick={() => {
@@ -154,6 +180,7 @@ export default function OdCreation({ open, onSubmit }) {
           </Box>
 
         </Box>
+
       </div>
     </LocalizationProvider>, 
     document.getElementById('modal')

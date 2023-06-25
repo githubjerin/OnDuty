@@ -10,6 +10,7 @@ import odRouterStudent from "./routes/student/ODdetail.route.js";
 import facultyRouter from "./routes/faculty/faculty.route.js";
 import odRouterFaculty from "./routes/faculty/ODdetail.route.js";
 import logoutRouter from "./routes/logout.route.js";
+import fileRouter from "./routes/file.route.js";
 
 dotenv.config();
 
@@ -43,6 +44,7 @@ app.get('/', (req, res) => {
     res.send("Test");
 });
 
+app.use('/uploads', fileRouter);
 app.use("/student", studentRouter);
 app.use("/od-application", odRouterStudent);
 app.use("/faculty", facultyRouter);

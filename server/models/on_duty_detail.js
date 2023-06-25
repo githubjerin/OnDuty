@@ -1,5 +1,3 @@
-/* TO BE EDITED */
-
 import mongoose from "mongoose";
 
 const schema = mongoose.Schema({
@@ -29,8 +27,6 @@ const schema = mongoose.Schema({
         default: "NIL"
     },
     proof: {
-        //TO BE EDITED
-        //ERR: TYPE [ MUST BE CAPABLE TO STORE PDF, JPEG, PNG, JPG etc.,]
         type: String
     },
     status: {

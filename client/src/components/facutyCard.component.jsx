@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material';
 import { Primary } from '../res/themes.js';
+import axios from 'axios';
 
 
 export default function CardComponent(props) {
@@ -19,6 +20,26 @@ export default function CardComponent(props) {
       return true;
     }
     else { return false }
+  }
+
+  const handleApprove = (id) => {
+    const body = {
+      status: "APPROVED"
+    }
+    axios.post('http://localhost:2003/od-approval/modify-entry/' + id, 
+    body,
+    {withCredentials: true}
+    ).then( window.location.reload()).catch(err => console.log(err));
+  }
+
+  const handleReject = (id) => {
+    const body = {
+      status: "NOT-APPROVED"
+    }
+    axios.post('http://localhost:2003/od-approval/modify-entry/' + id, 
+    body,
+    {withCredentials: true}
+    ).then( window.location.reload()).catch(err => console.log(err));
   }
 
   return (
@@ -53,6 +74,7 @@ export default function CardComponent(props) {
           variant="contained" 
           color="success" 
           disabled={isApproved(props.status)}
+          onClick={() => {handleApprove(props.id);}}
         >
           Approve
         </Button>
@@ -61,10 +83,11 @@ export default function CardComponent(props) {
           variant="contained" 
           color="error" 
           disabled={isApproved(props.status) || props.status === 'NOT-APPROVED'}
+          onClick={() => {handleReject(props.id);}}
         >
           Reject
         </Button>
-        <Button size="small">View Proof</Button>
+        <Button size="small" onClick={() => { props.handleViewState(true, props.proof) }}>View Proof</Button>
       </CardActions>
     </Card>
   );

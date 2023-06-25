@@ -1,6 +1,5 @@
 import student from "../../models/student.js";
 import express from "express";
-import dotenv from "dotenv";
 import bcrypt from 'bcryptjs';
 
 import { createToken, comparePassword, maxAge } from "../../modules/jwt-auth.modules.js";
@@ -8,7 +7,6 @@ import isLoggedIn from "../../middleware/isLoggedIn.middleware.js";
 import isAuthorized from "../../middleware/isAuthorized.middleware.js";
 
 const router = express.Router();
-dotenv.config();
 
 /*  SECTION - I : USER CREATION    */
 router.post('/signup', async (req, res) => {

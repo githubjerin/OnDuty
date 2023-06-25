@@ -1,22 +1,26 @@
 import React, { Component } from "react";
 import CardComponent from "../components/studentCard.component";
 import Navbar from "../components/navbar.component";
-import OdCreation from "../components/odCreation.component";
+import OdCreation from "../portals/odCreation.portal";
 import '../res/styles.css';
 import Fab from '@mui/material/Fab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import axios from "axios";
+import FileView from "../portals/fileView.portal";
 
 export default class StudentHome extends Component {
     constructor (props){
         super(props);
 
         this.entriesList = this.entriesList.bind(this);
+        this.handleViewState = this.handleViewState.bind(this);
 
         this.state = {
             entries: [],
-            isApplying: false
+            isApplying: false,
+            isViewing: false,
+            file: null
         };
     }
 
@@ -32,6 +36,13 @@ export default class StudentHome extends Component {
                 });     
     }
 
+    handleViewState(state, proof) {        
+        this.setState({
+            file: proof,
+            isViewing: state
+        });
+    }
+
     entriesList() {
         return this.state.entries.map(currententry => {       
             return <CardComponent 
@@ -44,6 +55,7 @@ export default class StudentHome extends Component {
                         end_date={currententry.end_date}
                         status={currententry.status}
                         proof={currententry.proof}
+                        handleViewState={this.handleViewState}
                     />;
         });
     }
@@ -80,6 +92,15 @@ export default class StudentHome extends Component {
                         });
                     }
                 }/>
+                <FileView
+                    filename={ this.state.file }
+                    open={ this.state.isViewing }
+                    onClose={ () => {
+                        this.setState({
+                            isViewing: false
+                        })
+                    }}
+                />
             </> 
         );
     }
